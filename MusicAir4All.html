@@ -34,6 +34,9 @@ document.write('<link rel="manifest" href="' + manifestURL + '">');
 
 <!-- Fonts & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
@@ -338,6 +341,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);f
         <button class="tico" id="searchBtn" onclick="toggleSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
         <button class="tico" id="darkBtn" onclick="toggleDark()"><i class="fa-solid fa-moon"></i></button>
         <button class="tico" id="gcBtn" onclick="syncGCal()" title="Exportar para Google Calendar"><i class="fa-brands fa-google"></i></button>
+        <button class="tico" onclick="syncToFirebase()" title="Sincronizar agora" style="color:var(--accent)"><i class="fa-solid fa-cloud-arrow-up"></i></button>
         <button class="tico" onclick="onFabTop()"><i class="fa-solid fa-plus"></i></button>
       </div>
     </div>
@@ -1621,6 +1625,58 @@ function showGCPanel(){
   mc.innerHTML=h;
 }
 
+// ===================== FIREBASE SYNC =====================
+const FB_CONFIG = {
+  databaseURL: "https://musicair4all-default-rtdb.firebaseio.com"
+};
+
+let fbApp, fbDb, fbReady=false;
+
+function initFirebase(){
+  try {
+    if(!firebase.apps.length) fbApp=firebase.initializeApp(FB_CONFIG);
+    else fbApp=firebase.apps[0];
+    fbDb=firebase.database(fbApp);
+    fbReady=true;
+    console.log('Firebase pronto!');
+    // Listen for real-time updates
+    fbDb.ref('ma4data').on('value', snap=>{
+      const d=snap.val();
+      if(!d)return;
+      // Only update if data is newer than local
+      if(d.evts)evts=d.evts;
+      if(d.artistas)artistas=d.artistas;
+      if(d.restaurantes)restaurantes=d.restaurantes;
+      // Update UI
+      if(curTab==='agenda')render();
+      if(curTab==='artistas')renderArtistas();
+      if(curTab==='restaurantes')renderRestaurantes();
+      showToast('Sincronizado ✓');
+    });
+  } catch(e){
+    console.warn('Firebase erro:', e);
+  }
+}
+
+function syncToFirebase(){
+  if(!fbReady){showToast('A ligar ao servidor…');return}
+  fbDb.ref('ma4data').set({
+    evts, artistas, restaurantes,
+    updatedAt: Date.now()
+  }).then(()=>showToast('Guardado e sincronizado ✓'))
+    .catch(e=>showToast('Erro ao sincronizar: '+e.message));
+}
+
+// Override save() to also sync to Firebase
+const _localSave=save;
+function save(){
+  // Save to localStorage as before
+  localStorage.setItem('ma4_evts',JSON.stringify(evts));
+  localStorage.setItem('ma4_arts',JSON.stringify(artistas));
+  // Also sync to Firebase
+  if(fbReady)syncToFirebase();
+}
+
 // ===================== INIT =====================
 const savedDark=localStorage.getItem('ma4_dark');
 if(savedDark!==null)darkMode=savedDark==='1';
@@ -1630,6 +1686,8 @@ renderEnsSlots();
 document.getElementById('rbData').value=tds();
 applyDark();
 render();
+// Init Firebase
+initFirebase();
 </script>
 </body>
 </html>
