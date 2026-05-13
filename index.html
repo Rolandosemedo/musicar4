@@ -1764,7 +1764,7 @@ function injectClicks() {
         var label=sc.querySelector('.sc-l')?sc.querySelector('.sc-l').textContent:'';
         var modal=document.createElement('div');
         modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;overflow-y:auto;padding:20px;box-sizing:border-box;';
-        var html='<div style="max-width:500px;margin:0 auto;color:#fff;"><div style="display:flex;justify-content:space-between;margin-bottom:20px;"><h2 style="margin:0;">'+label+' ('+filtered.length+')</h2><button onclick="this.closest('div[style*=fixed]').remove()" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;">x</button></div>';
+        var html='<div style="max-width:500px;margin:0 auto;color:#fff;"><div style="display:flex;justify-content:space-between;margin-bottom:20px;"><h2 style="margin:0;">'+ label +' ('+filtered.length+')</h2><button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;">x</button></div>';
         filtered.forEach(function(e){html+='<div style="background:#1a1a2e;border-radius:12px;padding:15px;margin-bottom:10px;"><div style="color:#f90;font-weight:bold;">'+(e.date||'')+'</div><div style="font-size:16px;margin:5px 0;">'+(e.title||'')+'</div><div style="color:#aaa;">'+String.fromCharCode(128205)+' '+(e.local||'')+'</div></div>';});
         html+='</div>';
         modal.innerHTML=html;
