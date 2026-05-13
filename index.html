@@ -736,7 +736,31 @@ function setTab(t,el){
   if(t==='road'){openP('pRoad');return}
   render();
 }
-function onFab(){if(curTab==='artistas')openArtForm(null);else if(curTab==='rest')openRestForm(null);else{resetEvtForm();openP('pEvt')}}
+function onFab(){showAddMenu()}
+function showAddMenu(){
+  var m=document.getElementById('addMenu');
+  if(m){m.style.display=m.style.display==='flex'?'none':'flex';return;}
+  var menu=document.createElement('div');
+  menu.id='addMenu';
+  menu.style.cssText='position:fixed;bottom:90px;right:20px;display:flex;flex-direction:column;gap:10px;z-index:9999;';
+  var items=[
+    {label:'📅 Agenda',icon:'fa-calendar',fn:"resetEvtForm();openP('pEvt');closeAddMenu()"},
+    {label:'🎤 Artista',icon:'fa-user',fn:'openArtForm(null);closeAddMenu()'},
+    {label:'🎵 Ensaio',icon:'fa-music',fn:"resetEvtForm();document.getElementById('eTipo').value='ensaio';openP('pEvt');closeAddMenu()"},
+    {label:'📋 Roadbook',icon:'fa-book',fn:"resetEvtForm();document.getElementById('eTipo').value='roadbook';openP('pEvt');closeAddMenu()"},
+    {label:'🍽️ Restaurante',icon:'fa-utensils',fn:'openRestForm(null);closeAddMenu()'}
+  ];
+  items.forEach(function(it){
+    var btn=document.createElement('button');
+    btn.style.cssText='background:#1a1a2e;color:#fff;border:none;padding:12px 20px;border-radius:25px;font-size:15px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,0.3);text-align:left;white-space:nowrap;';
+    btn.innerHTML=it.label;
+    btn.onclick=function(){eval(it.fn);};
+    menu.appendChild(btn);
+  });
+  document.body.appendChild(menu);
+  setTimeout(function(){document.addEventListener('click',function h(e){if(!menu.contains(e.target)&&!e.target.classList.contains('fab')){closeAddMenu();document.removeEventListener('click',h);}});},100);
+}
+function closeAddMenu(){var m=document.getElementById('addMenu');if(m){m.remove();}}
 function onFabTop(){onFab()}
 
 // ===================== RENDER MAIN =====================
