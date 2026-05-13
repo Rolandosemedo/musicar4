@@ -1794,33 +1794,32 @@ function filterEvtType(tipo) {
 }
 </script>
 
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+(function(){
   function aplicarCliques(){
     var scs=document.querySelectorAll('.sc');
     var tipos=['concert','ensaio','almoco'];
     scs.forEach(function(sc,i){
-      if(sc.dataset.clickOk)return;
-      sc.dataset.clickOk='1';
+      if(sc.dataset.ok)return;
+      sc.dataset.ok='1';
       sc.style.cursor='pointer';
       sc.onclick=function(){
+        if(typeof evts==='undefined')return;
         var filtered=evts.filter(function(e){return e.type===tipos[i];});
+        var label=sc.querySelector('.sc-l')?sc.querySelector('.sc-l').textContent:'';
         var modal=document.createElement('div');
-        modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:99999;overflow-y:auto;padding:20px;box-sizing:border-box;';
-        var label=sc.querySelector('.sc-l').textContent;
-        var html='<div style="max-width:500px;margin:0 auto;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><h2 style="color:#fff;margin:0;">'+label+' ('+filtered.length+')</h2><button onclick="this.closest('div[style*=fixed]').remove()" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;">✕</button></div>';
-        filtered.forEach(function(e){
-          html+='<div style="background:#1a1a2e;border-radius:12px;padding:15px;margin-bottom:10px;"><div style="color:#f90;font-weight:bold;">'+e.date+'</div><div style="color:#fff;font-size:16px;margin:5px 0;">'+e.title+'</div><div style="color:#aaa;">📍 '+e.local+'</div></div>';
-        });
+        modal.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:99999;overflow-y:auto;padding:20px;box-sizing:border-box;';
+        var html='<div style="max-width:500px;margin:0 auto;color:#fff;"><div style="display:flex;justify-content:space-between;margin-bottom:20px;"><h2 style="margin:0;">'+label+' ('+filtered.length+')</h2><button onclick="this.closest('div[style*=fixed]').remove()" style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;">x</button></div>';
+        filtered.forEach(function(e){html+='<div style="background:#1a1a2e;border-radius:12px;padding:15px;margin-bottom:10px;"><div style="color:#f90;font-weight:bold;">'+(e.date||'')+'</div><div style="font-size:16px;margin:5px 0;">'+(e.title||'')+'</div><div style="color:#aaa;">'+String.fromCharCode(128205)+' '+(e.local||'')+'</div></div>';});
         html+='</div>';
         modal.innerHTML=html;
         document.body.appendChild(modal);
       };
     });
-    // Logo fullscreen
     var logo=document.querySelector('img[alt="Music'Air4 All"]');
-    if(logo && !logo.dataset.clickOk){
-      logo.dataset.clickOk='1';
+    if(logo&&!logo.dataset.ok){
+      logo.dataset.ok='1';
       logo.style.cursor='pointer';
       logo.onclick=function(){
         var ov=document.createElement('div');
@@ -1834,9 +1833,9 @@ document.addEventListener('DOMContentLoaded', function() {
       };
     }
   }
-  setInterval(aplicarCliques, 1000);
-  setTimeout(aplicarCliques, 2000);
-});
+  setInterval(aplicarCliques,1500);
+  setTimeout(aplicarCliques,3000);
+})();
 </script>
 </body>
 </html>
