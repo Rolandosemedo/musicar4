@@ -1750,52 +1750,6 @@ function injectClicks() {
   // Clicar nos stats
   var scs = document.querySelectorAll('.sc');
   var tipos = ['concert', 'ensaio', 'almoco'];
-  scs.forEach(function(sc, i) {
-    if(tipos[i]) {
-      sc.style.cursor = 'pointer';
-      sc.onclick = function() { filterEvtType(tipos[i]); };
-    }
-  });
-
-  // Logo fullscreen
-  var logo = document.querySelector('img[alt="Music'Air4 All"]');
-  if(logo) {
-    logo.style.cursor = 'pointer';
-    logo.onclick = function() {
-      var ov = document.createElement('div');
-      ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:99999;display:flex;align-items:center;justify-content:center;';
-      var img = document.createElement('img');
-      img.src = logo.src;
-      img.style.cssText = 'max-width:90%;max-height:90%;object-fit:contain;border-radius:16px;';
-      ov.appendChild(img);
-      ov.onclick = function() { ov.remove(); };
-      document.body.appendChild(ov);
-    };
-  }
-}
-
-function filterEvtType(tipo) {
-  // Mudar para tab agenda e filtrar
-  var btns = document.querySelectorAll('.nav-tab, .tab-btn, [onclick*="switchTab"]');
-  // Clicar no primeiro item da agenda
-  var agendaBtn = document.querySelector('[onclick*="agenda"], [onclick*="Agenda"]');
-  if(agendaBtn) agendaBtn.click();
-  
-  setTimeout(function() {
-    var cards = document.querySelectorAll('.evt-card, .event-card, [class*="card"]');
-    cards.forEach(function(c) {
-      var txt = c.innerHTML.toLowerCase();
-      if(tipo === 'concert' && !txt.includes('concerto') && !txt.includes('concert')) c.style.display='none';
-      else if(tipo === 'ensaio' && !txt.includes('ensaio')) c.style.display='none';
-      else if(tipo === 'almoco' && !txt.includes('almo')) c.style.display='none';
-      else c.style.display='';
-    });
-  }, 300);
-}
-</script>
-
-
-<script>
 (function(){
   function aplicarCliques(){
     var scs=document.querySelectorAll('.sc');
