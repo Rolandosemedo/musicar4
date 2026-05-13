@@ -803,7 +803,7 @@ function render(){
 // ===================== AGENDA =====================
 function renderStats(){
   const me=evts.filter(e=>{const[y,m]=e.date.split('-');return+y===cY&&+m-1===cM});
-  document.getElementById('statsStrip').innerHTML=`<div class="stats-strip"><div class="sc"><div class="sc-n" style="color:var(--accent)">${me.filter(e=>e.type==='concert').length}</div><div class="sc-l">Concertos</div></div><div class="sc"><div class="sc-n" style="color:var(--blue2)">${me.filter(e=>e.type==='ensaio').length}</div><div class="sc-l">Ensaios</div></div><div class="sc"><div class="sc-n" style="color:var(--gold)">${me.filter(e=>e.type==='almoco').length}</div><div class="sc-l">Almoços</div></div></div>`;
+  document.getElementById('statsStrip').innerHTML=`<div class="stats-strip"><div class="sc" onclick="filterEvtType('concert')" style="cursor:pointer"><div class="sc-n" style="color:var(--accent)">${me.filter(e=>e.type==='concert').length}</div><div class="sc-l">Concertos</div></div><div class="sc" onclick="filterEvtType('ensaio')" style="cursor:pointer"><div class="sc-n" style="color:var(--blue2)">${me.filter(e=>e.type==='ensaio').length}</div><div class="sc-l">Ensaios</div></div><div class="sc" onclick="filterEvtType('almoco')" style="cursor:pointer"><div class="sc-n" style="color:var(--gold)">${me.filter(e=>e.type==='almoco').length}</div><div class="sc-l">Almoços</div></div></div>`;
 }
 function buildMonth(){
   const first=new Date(cY,cM,1);let sdow=first.getDay();sdow=sdow===0?6:sdow-1;
