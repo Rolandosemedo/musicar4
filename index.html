@@ -772,8 +772,8 @@ function showAddMenu(){
   var items=[
     {label:'📅 Agenda',icon:'fa-calendar',fn:"resetEvtForm();openP('pEvt');closeAddMenu()"},
     {label:'🎤 Artista',icon:'fa-user',fn:'openArtForm(null);closeAddMenu()'},
-    {label:'🎵 Ensaio',icon:'fa-music',fn:"resetEvtForm();document.getElementById('eTipo').value='ensaio';openP('pEvt');closeAddMenu()"},
-    {label:'📋 Roadbook',icon:'fa-book',fn:"resetEvtForm();document.getElementById('eTipo').value='roadbook';openP('pEvt');closeAddMenu()"},
+    {label:'🎵 Ensaio',icon:'fa-music',fn:"resetEvtForm();openP('pEvt');closeAddMenu();setTimeout(function(){var p=document.querySelector('.pill[data-type=ensaio]');if(p)p.click();},500)"},
+    {label:'📋 Roadbook',icon:'fa-book',fn:"resetEvtForm();openP('pEvt');closeAddMenu();setTimeout(function(){var p=document.querySelector('.pill[data-type=roadbook]');if(p)p.click();},500)"},
     {label:'🍽️ Restaurante',icon:'fa-utensils',fn:'openRestForm(null);closeAddMenu()'}
   ];
   items.forEach(function(it){
